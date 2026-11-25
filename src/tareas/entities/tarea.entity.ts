@@ -1,7 +1,8 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Proyecto } from './../../proyectos/entities/proyecto.entity.js';
-import { priority } from './priority-enum.js';
 import type { Relation } from 'typeorm';
+import { Proyecto } from './../../proyectos/entities/proyecto.entity.js';
+import { Priority } from './priority-enum.js';
+import { TaskStatus } from '../../proyectos/entities/state-enum.js';
 
 @Entity('tareas')
 export class Tarea {
@@ -9,21 +10,20 @@ export class Tarea {
   id: string;
 
   @Column()
-  nombre: string;
+  titulo: string;
 
   @Column()
-  description: string;
+  descripcion: string;
 
-  @Column({ default: false })
-  completed: boolean;
+  @Column({ type: 'enum', enum: TaskStatus, default: TaskStatus.PENDIENTE })
+  estado: TaskStatus;
 
-  @Column({ type: 'timestamp' })
-  startedAt: Date;
+  @Column({ type: 'enum', enum: Priority })
+  prioridad: Priority;
 
-  @Column({ type: 'enum', enum: priority })
-  prioridad: priority;
+  @Column({ type: 'date', name: 'fecha_limite' })
+  fechaLimite: string;
 
-  // 👇 Columna y relación con Proyecto
   @Column({ name: 'proyecto_id' })
   proyectoId: string;
 

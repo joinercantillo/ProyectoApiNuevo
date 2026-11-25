@@ -20,16 +20,27 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        type: 'postgres',
-        host: configService.get<string>('DB_HOST', '127.0.0.1'),
-        port: Number(configService.get('DB_PORT')) || 5435,
-        username: configService.get<string>('DB_USERNAME'),
-        password: configService.get<string>('DB_PASSWORD'),
-        database: configService.get<string>('DB_NAME'),
-        autoLoadEntities: true,
-        synchronize: true,
-      }),
+      useFactory: (configService: ConfigService) => {
+        const required = (key: string): string => {
+          const value = configService.get<string>(key);
+          if (!value) throw new Error(`La variable de entorno ${key} es requerida`);
+          return value;
+        };
+
+        return {
+          type: required('DB_TYPE') as 'postgres',
+          host: required('DB_HOST'),
+          port: Number(required('DB_PORT')),
+          username: required('DB_USERNAME'),
+          password: required('DB_PASSWORD'),
+          database: required('DB_NAME'),
+          autoLoadEntities: true,
+          synchronize: required('DB_SYNCHRONIZE') === 'true',
+          ssl: required('DB_SSL') === 'true'
+            ? { rejectUnauthorized: required('DB_SSL_REJECT_UNAUTHORIZED') === 'true' }
+            : false,
+        };
+      },
     }),
     ProyectosModule,
     TareasModule,

@@ -1,24 +1,33 @@
-import { IsBoolean, IsDateString, IsEnum, IsOptional, IsString, IsUUID } from 'class-validator';
-import { priority } from './../entities/priority-enum.js'; // Ajusta tu ruta
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsDateString, IsEnum, IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
+import { Priority } from './../entities/priority-enum.js';
+import { TaskStatus } from '../../proyectos/entities/state-enum.js';
 
 export class CreateTareaDto {
+  @ApiProperty()
   @IsString()
-  nombre: string;
+  @IsNotEmpty()
+  titulo: string;
 
+  @ApiProperty()
   @IsString()
-  description: string;
+  @IsNotEmpty()
+  descripcion: string;
 
-  @IsBoolean()
-  @IsOptional() // Opcional si por defecto inicia en false
-  completed?: boolean;
+  @ApiPropertyOptional({ enum: TaskStatus, default: TaskStatus.PENDIENTE })
+  @IsEnum(TaskStatus)
+  @IsOptional()
+  estado?: TaskStatus;
 
+  @ApiProperty({ enum: Priority })
+  @IsEnum(Priority)
+  prioridad: Priority;
+
+  @ApiProperty({ example: '2026-12-25' })
   @IsDateString()
-  startedAt: string;
+  fechaLimite: string;
 
-  @IsEnum(priority)
-  prioridad: priority;
-
-  // 👇 Así llamas la relación con Proyecto (usando UUID porque tu id es string)
+  @ApiProperty({ format: 'uuid' })
   @IsUUID()
   proyectoId: string;
 }

@@ -1,8 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseUUIDPipe } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { ProyectosService } from './proyectos.service.js';
 import { CreateProyectoDto } from './dto/create-proyecto.dto.js';
 import { UpdateProyectoDto } from './dto/update-proyecto.dto.js';
 
+@ApiTags('Proyectos')
 @Controller('proyectos')
 export class ProyectosController {
   constructor(private readonly proyectosService: ProyectosService) {}
@@ -17,18 +19,23 @@ export class ProyectosController {
     return this.proyectosService.findAll();
   }
 
+  @Get(':id/progreso')
+  getProgress(@Param('id', ParseUUIDPipe) id: string) {
+    return this.proyectosService.getProgress(id);
+  }
+
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.proyectosService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateProyectoDto: UpdateProyectoDto) {
+  update(@Param('id', ParseUUIDPipe) id: string, @Body() updateProyectoDto: UpdateProyectoDto) {
     return this.proyectosService.update(id, updateProyectoDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.proyectosService.remove(id);
   }
 }

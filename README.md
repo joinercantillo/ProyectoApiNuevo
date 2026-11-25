@@ -21,6 +21,41 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
+# API de gestión de proyectos y tareas
+
+API REST desarrollada con NestJS, PostgreSQL y TypeORM.
+
+## Endpoints principales
+
+- `POST /proyectos`, `GET /proyectos`, `GET /proyectos/:id`, `PATCH /proyectos/:id`, `DELETE /proyectos/:id`
+- `GET /proyectos/:id/progreso`
+- `POST /tareas`, `GET /tareas`, `GET /tareas/:id`, `PATCH /tareas/:id`, `DELETE /tareas/:id`
+- `GET /tareas/proyecto/:proyectoId`
+- `GET /tareas/vencidas`
+- `PATCH /tareas/:id/estado`
+- Filtros: `GET /tareas?estado=pendiente&prioridad=alta`
+
+Documentación Swagger: `/api/docs`.
+
+## Ejecución local
+
+```bash
+cp .env.example .env
+docker compose up -d db
+npm install
+npm run start:dev
+```
+
+## Azure y CI/CD
+
+El workflow `.github/workflows/ci-cd.yml` instala dependencias, ejecuta lint, pruebas y compilación en cada cambio y despliega una imagen en Azure Container Registry y Azure Web App desde `main`.
+
+Configure en GitHub Actions:
+
+- Secrets: `AZURE_CREDENTIALS` con una credencial de Azure CLI para el service principal.
+- Variables: `ACR_NAME` y `AZURE_WEBAPP_NAME`.
+- Variables de entorno de Azure Web App: `PORT`, `DB_TYPE`, `DB_HOST`, `DB_PORT`, `DB_USERNAME`, `DB_PASSWORD`, `DB_NAME`, `DB_SSL`, `DB_SSL_REJECT_UNAUTHORIZED` y `DB_SYNCHRONIZE=false`.
+
 ## Description
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
