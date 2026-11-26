@@ -24,6 +24,9 @@ export class ProyectosService {
 
   async create(dto: CreateProyectoDto): Promise<Proyecto> {
     this.validateDates(dto.fechaInicio, dto.fechaFinalizacion);
+    if (dto.fechaInicio < new Date().toISOString().split('T')[0]) {
+      throw new BadRequestException('La fecha de inicio no puede ser anterior a la fecha actual');
+    }
     return this.proyectoRepository.save(this.proyectoRepository.create(dto));
   }
 

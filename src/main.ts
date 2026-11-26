@@ -16,8 +16,10 @@ async function bootstrap() {
     .setDescription('CRUD de proyectos, tareas, filtros y progreso')
     .setVersion('1.0')
     .build();
+    app.setGlobalPrefix('api/v1');
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);
+
 
   const port = process.env.PORT;
   if (!port) throw new Error('La variable de entorno PORT es requerida');
