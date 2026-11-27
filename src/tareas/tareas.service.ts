@@ -15,7 +15,7 @@ export class TareasService {
     @InjectRepository(Tarea)
     private readonly tareaRepository: Repository<Tarea>,
     @InjectRepository(Proyecto)
-    private readonly proyectoRepository: Repository<Proyecto>,
+    private readonly proyectoRepository : Repository<Proyecto>,
   ) {}
 
   private async assertProjectExists(id: string): Promise<void> {
