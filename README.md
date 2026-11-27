@@ -52,7 +52,7 @@ El workflow `.github/workflows/ci-cd.yml` instala dependencias, ejecuta lint, pr
 
 Configure en GitHub Actions:
 
-- Secrets: `AZURE_CREDENTIALS` con una credencial de Azure CLI para el service principal.
+- Secrets del entorno `production`: `AZURE_CLIENT_ID`, `AZURE_TENANT_ID` y `AZURE_SUBSCRIPTION_ID`. El workflow inicia sesión con OIDC; configure una credencial federada en el service principal de Azure con issuer `https://token.actions.githubusercontent.com`, audience `api://AzureADTokenExchange` y subject `repo:joinercantillo/ProyectoApiNuevo:environment:production`. Restrinja también el entorno `production` a la rama `main` en GitHub.
 - Variables: `ACR_NAME` y `AZURE_WEBAPP_NAME`.
 - Variables de entorno de Azure Web App: `PORT`, `DB_TYPE`, `DB_HOST`, `DB_PORT`, `DB_USERNAME`, `DB_PASSWORD`, `DB_NAME`, `DB_SSL`, `DB_SSL_REJECT_UNAUTHORIZED` y `DB_SYNCHRONIZE=false`.
 
